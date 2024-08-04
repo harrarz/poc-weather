@@ -9,7 +9,9 @@ import { MainWeatherCard } from './MainWeatherCard';
 import { WeatherDetailsCard } from './WeatherDetailsCard';
 import './Weather.css';
 
-const API_KEY = process.env.REACT_APP_OPENWEATHERMAP_API_KEY || '';
+
+const API_KEY = 'c6dea39f86ea31dc114f0a4f0eec8fa9';
+//const API_KEY = process.env.OPENWEATHERMAP_API_KEY || '';
 
 if (!API_KEY) {
   console.error('API key missing. Check env variables');

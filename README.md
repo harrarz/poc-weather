@@ -10,8 +10,8 @@
 Dans le cadre de cet exercice, la clé API OpenWeatherMap a été incluse directement dans le code source :
 
 ```javascript
-const API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-// const API_KEY = process.env.REACT_APP_OPENWEATHERMAP_API_KEY || '';
+const API_KEY = 'c6dea39f86ea31dc114f0a4f0eec8fa9';
+// const API_KEY = process.env.OPENWEATHERMAP_API_KEY || '';
 ```
 
 Il est important de noter que dans un environnement de production, j'aurais géré la clé API via des variables d'environnement pour assurer les meilleures pratiques de sécurité. La ligne commentée démontre l'implémentation qui serait utilisée dans un tel scénario.
