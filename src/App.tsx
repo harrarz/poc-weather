@@ -5,10 +5,7 @@ import { Weather } from './view/Weather';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
-      <body>
-      </body>
+      <Weather />
     </div>
   );
 }

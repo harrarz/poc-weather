@@ -1,38 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.weather-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.weather-card h2 {
+  margin-top: 0;
+  font-size: 2.5em;
+  color: #333;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.weather-icon {
+  font-size: 5em;
+  margin: 20px 0;
+}
+
+.temperature {
+  font-size: 3em;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.description {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+
+.weather-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  text-align: left;
+}
+
+.weather-details p {
+  margin: 5px 0;
+}
+
+.loading-container, .error-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #4db8ff, #ffaaee);
+}
+
+.loading-content, .error-content {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.loading-content h1, .error-content h1 {
+  margin-top: 20px;
+  font-size: 2em;
+  color: #333;
+}
+
+.loading-content p, .error-content p {
+  margin: 10px 0;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.location-message {
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.location-message svg {
+  margin-right: 10px;
+  color: #4db8ff;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+.location-message p {
+  margin: 0;
+  font-size: 1em;
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .weather-card, .loading-content, .error-content {
+    width: 100%;
+    border-radius: 0;
   }
 }
+
+
