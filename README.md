@@ -7,8 +7,7 @@
 - Mises à jour en temps réel des données météorologiques lors des changements de localisation
 
 ## Gestion de la Clé API
-Dans le cadre de cet exercice, la clé API OpenWeatherMap a été incluse directement dans le code source :
-
+Dans le cadre de cet exercice, pour des raisons de simplicité et pour faciliter l'éxecutions et tests, la clé API OpenWeatherMap a été incluse directement dans le code source.
 ```javascript
 const API_KEY = 'c6dea39f86ea31dc114f0a4f0eec8fa9';
 // const API_KEY = process.env.OPENWEATHERMAP_API_KEY || '';
