@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useSpring, animated } from 'react-spring';
-import { WiDaySunny, WiCloudy, WiRain, WiSnow, WiThunderstorm, WiFog } from 'react-icons/wi';
-import { FiMapPin } from 'react-icons/fi';
+import { WiDaySunny, WiCloudy, WiRain, WiSnow, WiThunderstorm, WiFog, WiSunrise, WiSunset, WiStrongWind, WiHumidity, WiBarometer } from 'react-icons/wi';
+import { FiMapPin, FiThermometer, FiDroplet } from 'react-icons/fi';
 
 const API_KEY = "c6dea39f86ea31dc114f0a4f0eec8fa9"; // bad practice, should be stored in .env file, but okay for this example for simplicity 
+//const API_KEY = process.env.REACT_APP_OPENWEATHERMAP_API_KEY || '';
 
 interface WeatherData {
   main: {
@@ -12,6 +13,8 @@ interface WeatherData {
     humidity: number;
     feels_like: number;
     pressure: number;
+    temp_min: number;
+    temp_max: number;
   };
   weather: Array<{
     description: string;
@@ -21,18 +24,28 @@ interface WeatherData {
   name: string;
   wind: {
     speed: number;
+    deg: number;
   };
+  sys: {
+    sunrise: number;
+    sunset: number;
+  };
+  visibility: number;
+}
+
+if (!API_KEY) {
+  console.error('API key missing. Check env variables');
 }
 
 const getWeatherIcon = (main: string) => {
   switch (main.toLowerCase()) {
-    case 'clear': return <WiDaySunny />;
-    case 'clouds': return <WiCloudy />;
-    case 'rain': return <WiRain />;
-    case 'snow': return <WiSnow />;
-    case 'thunderstorm': return <WiThunderstorm />;
-    case 'mist': case 'fog': return <WiFog />;
-    default: return <WiDaySunny />;
+    case 'clear': return <WiDaySunny className="weather-icon" style={{color: '#FFD700'}} />;
+    case 'clouds': return <WiCloudy className="weather-icon" style={{color: '#A9A9A9'}} />;
+    case 'rain': return <WiRain className="weather-icon" style={{color: '#4682B4'}} />;
+    case 'snow': return <WiSnow className="weather-icon" style={{color: '#FFFAFA'}} />;
+    case 'thunderstorm': return <WiThunderstorm className="weather-icon" style={{color: '#4B0082'}} />;
+    case 'mist': case 'fog': return <WiFog className="weather-icon" style={{color: '#D3D3D3'}} />;
+    default: return <WiDaySunny className="weather-icon" style={{color: '#FFD700'}} />;
   }
 };
 
@@ -46,6 +59,10 @@ const getBackgroundColor = (main: string) => {
     case 'mist': case 'fog': return '#D3D3D3';
     default: return '#87CEEB';
   }
+};
+
+const formatTime = (timestamp: number) => {
+  return new Date(timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
 export const Weather: React.FC = () => {
@@ -68,6 +85,7 @@ export const Weather: React.FC = () => {
     from: { opacity: 0.5, color: '#4db8ff' },
     config: { duration: 2000 },
   });
+
 
   const getWeather = async (lat: number, lon: number) => {
     const cacheKey = `weather_${lat}_${lon}`;
@@ -145,27 +163,54 @@ export const Weather: React.FC = () => {
   const backgroundColor = getBackgroundColor(weatherData.weather[0].main);
 
   return (
-    <div style={{
+    <div className="weather-container" style={{
       background: `linear-gradient(135deg, ${backgroundColor}, #ffffff)`,
-      minHeight: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '20px',
-      boxSizing: 'border-box',
     }}>
-      <animated.div style={fadeIn} className="weather-card">
+      <animated.div style={fadeIn} className="weather-card main-card">
         <h2>{weatherData.name}</h2>
         <div className="weather-icon">
           {getWeatherIcon(weatherData.weather[0].main)}
         </div>
         <p className="temperature">{Math.round(weatherData.main.temp)}°C</p>
         <p className="description">{weatherData.weather[0].description}</p>
+        <div className="temp-range">
+          <span><FiThermometer style={{color: '#4682B4'}} /> Low: {Math.round(weatherData.main.temp_min)}°C</span>
+          <span><FiThermometer style={{color: '#FF6347'}} /> High: {Math.round(weatherData.main.temp_max)}°C</span>
+        </div>
+      </animated.div>
+      <animated.div style={fadeIn} className="weather-card details-card">
+        <h3>Weather Details</h3>
         <div className="weather-details">
-          <p><strong>Feels like:</strong> {Math.round(weatherData.main.feels_like)}°C</p>
-          <p><strong>Humidity:</strong> {weatherData.main.humidity}%</p>
-          <p><strong>Wind speed:</strong> {weatherData.wind.speed} m/s</p>
-          <p><strong>Pressure:</strong> {weatherData.main.pressure} hPa</p>
+          <div className="detail-item">
+            <WiBarometer style={{color: '#4682B4'}} />
+            <span className="detail-label">Feels like</span>
+            <span className="detail-value">{Math.round(weatherData.main.feels_like)}°C</span>
+          </div>
+          <div className="detail-item">
+            <WiHumidity style={{color: '#4169E1'}} />
+            <span className="detail-label">Humidity</span>
+            <span className="detail-value">{weatherData.main.humidity}%</span>
+          </div>
+          <div className="detail-item">
+            <WiStrongWind style={{color: '#20B2AA'}} />
+            <span className="detail-label">Wind</span>
+            <span className="detail-value">{weatherData.wind.speed} m/s</span>
+          </div>
+          <div className="detail-item">
+            <FiDroplet style={{color: '#1E90FF'}} />
+            <span className="detail-label">Pressure</span>
+            <span className="detail-value">{weatherData.main.pressure} hPa</span>
+          </div>
+          <div className="detail-item">
+            <WiSunrise style={{color: '#FF6347'}} />
+            <span className="detail-label">Sunrise</span>
+            <span className="detail-value">{formatTime(weatherData.sys.sunrise)}</span>
+          </div>
+          <div className="detail-item">
+            <WiSunset style={{color: '#FF4500'}} />
+            <span className="detail-label">Sunset</span>
+            <span className="detail-value">{formatTime(weatherData.sys.sunset)}</span>
+          </div>
         </div>
       </animated.div>
     </div>
